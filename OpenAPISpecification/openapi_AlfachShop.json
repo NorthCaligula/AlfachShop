@@ -1,0 +1,757 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Спортивый магазин OpenApi спец",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:8000/api/",
+      "description": "Dev server"
+    }
+  ],
+  "paths": {
+    "/carts/{id_customers}": {
+      "get": {
+        "summary": "Просмотр своей корзины",
+        "tags": [
+          "Carts"
+        ],
+        "operationId": "getAllGoodsInCartsById",
+        "parameters": [
+          {
+            "name": "id_customers",
+            "in": "path",
+            "required": true,
+            "description": "Идентификатор пользователя, чтобы просмотреть его корзину",
+            "schema": {
+              "type": "string"
+            },
+            "example": "66afcb6ef1dc34a2ba07747b"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно передаем корзину с товарами от пользователя",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Orders"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Ошибка в запросе"
+          },
+          "404": {
+            "description": "Корзина пуста, для данного пользователя"
+          }
+        }
+      },
+      "post": {
+        "summary": "Добавление экземпляра товара в корзину, если его до этого не было и корзина пуста",
+        "tags": [
+          "Carts"
+        ],
+        "operationId": "createCarts",
+        "parameters": [
+          {
+            "name": "id_customers",
+            "in": "path",
+            "required": true,
+            "description": "Идентификатор пользователя, которому создаем корзину",
+            "schema": {
+              "type": "string"
+            },
+            "example": "66bc7043f0c595a32768620d"
+          },
+          {
+            "name": "id_product",
+            "in": "query",
+            "required": true,
+            "description": "Передаём индивидуальный номер каждого товара, чтобы записать его",
+            "schema": {
+              "type": "string"
+            },
+            "example": "66bc6d31a0db858f341da690"
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": true,
+            "description": "Количество товара, которое добавляем в корзину",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 5
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно создана корзина и добавлен товар"
+          },
+          "400": {
+            "description": "Если корзина уже создана"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Добавление экземпляра товара в созданную корзину, а также изменение количества (не на 0)",
+        "tags": [
+          "Carts"
+        ],
+        "operationId": "editCarts",
+        "parameters": [
+          {
+            "name": "id_customers",
+            "in": "path",
+            "required": true,
+            "description": "Идентификатор пользователя, которому изменям корзину",
+            "schema": {
+              "type": "string"
+            },
+            "example": "66bc7043f0c595a32768620d"
+          },
+          {
+            "name": "id_product",
+            "in": "query",
+            "required": true,
+            "description": "Передаём индивидуальный номер каждого товара, чтобы изменить его",
+            "schema": {
+              "type": "string"
+            },
+            "example": "66bc6d31a0db858f341da690"
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": true,
+            "description": "Новое кол-во товара, которое добавляем в корзину",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 5
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "При успешном изменение"
+          },
+          "400": {
+            "description": "При всех ошибках (Передано не число или ноль, попытка не изменения содержимого корзины, а её создание)"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Удаление товара из корзины",
+        "tags": [
+          "Carts"
+        ],
+        "operationId": "deleteProdInCarts",
+        "parameters": [
+          {
+            "name": "id_customers",
+            "in": "path",
+            "required": true,
+            "description": "Идентификатор пользователя, которому изменям корзину",
+            "schema": {
+              "type": "string"
+            },
+            "example": "66bc7043f0c595a32768620d"
+          },
+          {
+            "name": "id_product",
+            "in": "query",
+            "required": true,
+            "description": "Передаём индивидуальный номер каждого товара, чтобы удалить его",
+            "schema": {
+              "type": "string"
+            },
+            "example": "66bc6d31a0db858f341da690"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "При успешном удалении из корзины"
+          },
+          "410": {
+            "description": "Если объекта в корзине нет"
+          }
+        }
+      }
+    },
+    "/wish/{id_customers}": {
+      "get": {
+        "summary": "Просмотр своих желаемых товаров",
+        "tags": [
+          "Wish"
+        ],
+        "operationId": "getWishCust",
+        "parameters": [
+          {
+            "name": "id_customers",
+            "in": "path",
+            "required": true,
+            "description": "Идентификатор пользователя, которому изменям корзину",
+            "schema": {
+              "type": "string"
+            },
+            "example": "66bc7043f0c595a32768620d"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "При успешном добавление в желаемое нового товара",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Если этот товар/покупателя уже есть в желаемом"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Добавление и удаление товара в желаемом",
+        "tags": [
+          "Wish"
+        ],
+        "operationId": "editWishCust",
+        "parameters": [
+          {
+            "name": "id_customers",
+            "in": "path",
+            "required": true,
+            "description": "Идентификатор пользователя, которому изменям корзину",
+            "schema": {
+              "type": "string"
+            },
+            "example": "66bc7043f0c595a32768620d"
+          },
+          {
+            "name": "append",
+            "in": "query",
+            "required": true,
+            "description": "Добавляем или удаляем",
+            "schema": {
+              "type": "boolean"
+            },
+            "example": false
+          },
+          {
+            "name": "id_product",
+            "in": "query",
+            "required": true,
+            "description": "Передаём индивидуальный номер каждого товара, чтобы удалить его",
+            "schema": {
+              "type": "string"
+            },
+            "example": "66bc6d31a0db858f341da690"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "При успешном добавление/удаление в желаемое нового товара"
+          },
+          "400": {
+            "description": "Если этот товар/покупателя уже есть/отсутствует  в желаемом"
+          }
+        }
+      }
+    },
+    "/admin/wish/{id_product}": {
+      "get": {
+        "summary": "Выгрузка данных о товарах, добавленных в желаемое",
+        "tags": [
+          "Wish"
+        ],
+        "operationId": "getWishProd",
+        "parameters": [
+          {
+            "name": "id_product",
+            "in": "path",
+            "required": true,
+            "description": "Идентификатор товара (или 0 если нужны все товары)",
+            "schema": {
+              "type": "string"
+            },
+            "example": "66afcb6ef1dc34a2ba07747b"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Выгрузили данные"
+          },
+          "400": {
+            "description": "Не существует товара"
+          }
+        }
+      }
+    },
+    "/orders/{id_customers}": {
+      "patch": {
+        "summary": "Оплата корзины",
+        "tags": [
+          "Carts"
+        ],
+        "operationId": "payCarts",
+        "parameters": [
+          {
+            "name": "id_customers",
+            "in": "path",
+            "required": true,
+            "description": "Передаём индивидуальный номер пользователя, которые оплачивал",
+            "schema": {
+              "type": "string"
+            },
+            "example": "66bc7043f0c595a32768620d"
+          },
+          {
+            "name": "paid",
+            "in": "query",
+            "required": true,
+            "description": "Передаём прошла ли оплата",
+            "schema": {
+              "type": "boolean"
+            },
+            "example": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ОК Удалось оплатить"
+          },
+          "400": {
+            "description": "Не удалось оплатить"
+          }
+        }
+      },
+      "get": {
+        "summary": "Просмотр своих заказов",
+        "tags": [
+          "Orders"
+        ],
+        "operationId": "getOrdersCust",
+        "parameters": [
+          {
+            "name": "id_customers",
+            "in": "path",
+            "required": true,
+            "description": "Передаём индивидуальный номер пользователя, которые оплачивал",
+            "schema": {
+              "type": "string"
+            },
+            "example": "66bc7043f0c595a32768620d"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Смогли передать данные",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id_orders": {
+                        "type": "string",
+                        "example": "66bc7043f0c595a32768620d"
+                      },
+                      "goods": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "count": {
+                              "type": "integer",
+                              "example": 5
+                            },
+                            "id_product": {
+                              "type": "string",
+                              "example": "66afd0daf1dc34a2ba077480"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/orders": {
+      "get": {
+        "summary": "Выгрузка данных о заказах (в том числе не оплаченных)",
+        "tags": [
+          "Orders"
+        ],
+        "operationId": "getAllOrders",
+        "parameters": [
+          {
+            "name": "id_order",
+            "in": "query",
+            "required": true,
+            "description": "Индивидуальный номер каждого оформленного заказа (или 0 если нужны все заказы)",
+            "schema": {
+              "type": "string"
+            },
+            "example": "66bdd8f0b50a3e617118427e"
+          },
+          {
+            "name": "paid",
+            "in": "query",
+            "required": true,
+            "description": "Передаём нужны ли нам неоплаченные заказы",
+            "schema": {
+              "type": "boolean"
+            },
+            "example": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Выгрузили данные",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Orders"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Если некорректны параметры запроса"
+          },
+          "404": {
+            "description": "Если такого заказа нет"
+          }
+        }
+      }
+    },
+    "/types/None": {
+      "get": {
+        "summary": "Запросить типы товаров",
+        "tags": [
+          "Goods"
+        ],
+        "operationId": "getTypesGoods",
+        "responses": {
+          "200": {
+            "description": "Успешно передали все возможные типы товаров",
+            "content": {
+              "aplication/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type_name": {
+                        "type": "string",
+                        "example": "Sneakers"
+                      },
+                      "count_prod": {
+                        "type": "integer",
+                        "example": 5
+                      },
+                      "avg_price": {
+                        "type": "number",
+                        "example": 4200
+                      },
+                      "all_count": {
+                        "type": "integer",
+                        "example": 300
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/types/{type_name}": {
+      "get": {
+        "summary": "Запросить ассортимент товаров по определенному типу",
+        "tags": [
+          "Goods"
+        ],
+        "operationId": "getGoodsByType",
+        "parameters": [
+          {
+            "name": "type_name",
+            "in": "path",
+            "required": true,
+            "description": "Идентификатор типа товара, если равен «All», то мы просим вернуть типы товара, чтобы потом выбрать. Если не равен «All», то просим вернуть список этого товара с базы, в соответствии с переданным идентификатором",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Sneakers"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно переданы типы или список товаров",
+            "content": {
+              "aplication/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Goods"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/goods": {
+      "patch": {
+        "summary": "Редактирование количества отображаемого товара",
+        "tags": [
+          "Goods"
+        ],
+        "operationId": "editCountProd",
+        "parameters": [
+          {
+            "name": "id_product",
+            "in": "query",
+            "required": true,
+            "description": "Передаём индивидуальный номер каждого товара, чтобы удалить его",
+            "schema": {
+              "type": "string"
+            },
+            "example": "66bc6d31a0db858f341da690"
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": true,
+            "description": "Новое кол-во товара",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 50
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Изменения приняты"
+          },
+          "404": {
+            "description": "Не найден товар"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Удаление товара",
+        "tags": [
+          "Goods"
+        ],
+        "operationId": "deleteProd",
+        "parameters": [
+          {
+            "name": "id_product",
+            "in": "query",
+            "required": true,
+            "description": "Передаём индивидуальный номер каждого товара, чтобы удалить его",
+            "schema": {
+              "type": "string"
+            },
+            "example": "66bc6d31a0db858f341da690"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "При успешном удалении объекта"
+          },
+          "410": {
+            "description": "Если объекта в ассортименте нет"
+          }
+        }
+      },
+      "post": {
+        "summary": "Добавление товара",
+        "tags": [
+          "Goods"
+        ],
+        "operationId": "addNewProd",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Goods"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Создана новая карточка товара"
+          },
+          "400": {
+            "description": "При некорректных данных в запросе"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Orders": {
+        "type": "object",
+        "properties": {
+          "_id_order": {
+            "type": "string",
+            "example": "66afd489f1dc34a2ba077488"
+          },
+          "_id_customers": {
+            "type": "string",
+            "example": "66afcb6ef1dc34a2ba07747b"
+          },
+          "date_of_orders": {
+            "type": "integer",
+            "example": 0
+          },
+          "paid": {
+            "type": "boolean",
+            "example": true
+          },
+          "delivered": {
+            "type": "boolean",
+            "example": false
+          },
+          "id_goods": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "integer",
+                  "example": 3
+                },
+                "_id_one_product": {
+                  "type": "string",
+                  "example": "66bc78643d02a9a2055dbb75"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Goods": {
+        "type": "object",
+        "properties": {
+          "_id_product": {
+            "type": "string",
+            "example": "66afd0daf1dc34a2ba077480"
+          },
+          "types": {
+            "type": "string",
+            "example": "T-Shirt"
+          },
+          "country": {
+            "type": "string",
+            "example": "Russia"
+          },
+          "price": {
+            "type": "integer",
+            "example": 500
+          },
+          "count": {
+            "type": "integer",
+            "example": 50
+          },
+          "wish_count": {
+            "type": "integer",
+            "example": 5
+          },
+          "size": {
+            "type": "integer",
+            "example": 50
+          },
+          "gender": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "T-shirts with apple"
+          }
+        }
+      },
+      "Customers": {
+        "type": "object",
+        "properties": {
+          "_id_customer": {
+            "type": "string",
+            "example": "66bc6d31a0db858f341da690"
+          },
+          "name_login": {
+            "type": "string",
+            "example": "SemenDamask08"
+          },
+          "first_name": {
+            "type": "string",
+            "example": "Sergey"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Semenov"
+          },
+          "patronymics": {
+            "type": "string",
+            "example": "Yurievich"
+          },
+          "email": {
+            "type": "string",
+            "example": "SemenovDamask24@yahoo.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "9512713707"
+          },
+          "date_of_reg": {
+            "type": "integer",
+            "example": 1723638494
+          },
+          "_id_wish_goods": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "personal_inf": {
+            "type": "object",
+            "properties": {
+              "date_of_birth": {
+                "type": "integer",
+                "example": 1210169939
+              },
+              "gender": {
+                "type": "integer",
+                "example": 0
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
