@@ -7,7 +7,7 @@
 
 
 Пример данных в БД:\
-![Логика данных в коллекциях.](https://raw.githubusercontent.com/NorthCaligula/testrepo/main/typeDataInDB.png?token=GHSAT0AAAAAACXFGAEVZHBFNVYEKU6JZFK4ZXC6YWA)
+![Логика данных в коллекциях.](https://raw.githubusercontent.com/NorthCaligula/AlfschShop/main/typeDataInDB.png)
 
 Отдельными файликами, в папочке, прикрепил спецификацию API, по которой делал проект. В том числе в Swagger Editor\
 Для написания кода использовал pyCharm 22.2
